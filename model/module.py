@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 
 class Block(nn.Module):
-    def __init__(self, in_ch,out_ch, kernel_size=3, padding=1, stride=1):
+    def __init__(self, in_ch, out_ch, kernel_size=3, padding=1, stride=1):
         super(Block, self).__init__()
         self.conv1 = nn.Conv2d(in_ch, out_ch, kernel_size=kernel_size, padding=padding, stride=stride)
         self.bn1 = nn.BatchNorm2d(out_ch)
@@ -16,7 +16,7 @@ class Block(nn.Module):
 
 
 class ResBlock(nn.Module):
-    def __init__(self, in_ch,out_ch, kernel_size=3, padding=1, stride=1):
+    def __init__(self, in_ch, out_ch, kernel_size=3, padding=1, stride=1):
         super(ResBlock, self).__init__()
         self.bn1 = nn.BatchNorm2d(in_ch)
         self.relu1 = nn.ReLU(inplace=True)
@@ -95,32 +95,40 @@ class ASPP(nn.Module):
 
     def __init__(self, in_chans, out_chans, rate=1):
         super(ASPP, self).__init__()
+        '''
+        参见论文Encoder-decoder图 Fig.2
+        '''
+        # 1*1 Conv
         self.branch1 = nn.Sequential(
             nn.Conv2d(in_chans, out_chans, 1, 1, padding=0, dilation=rate, bias=True),
             nn.BatchNorm2d(out_chans),
             nn.ReLU(inplace=True),
         )
+        # 3*3 Conv, rate 6
         self.branch2 = nn.Sequential(
             nn.Conv2d(in_chans, out_chans, 3, 1, padding=6 * rate, dilation=6 * rate, bias=True),
             nn.BatchNorm2d(out_chans),
             nn.ReLU(inplace=True),
         )
+        # 3*3 Conv, rate 12
         self.branch3 = nn.Sequential(
             nn.Conv2d(in_chans, out_chans, 3, 1, padding=12 * rate, dilation=12 * rate, bias=True),
             nn.BatchNorm2d(out_chans),
             nn.ReLU(inplace=True),
         )
+        # 3*3 Conv, rate 18
         self.branch4 = nn.Sequential(
             nn.Conv2d(in_chans, out_chans, 3, 1, padding=18 * rate, dilation=18 * rate, bias=True),
             nn.BatchNorm2d(out_chans),
             nn.ReLU(inplace=True),
         )
-
-        #使用全局avg的主要作用是对全局特征的一个建模
+        # Image Pooling
+        # 使用全局avg的主要作用是对全局特征的一个建模
         self.branch5_avg = nn.AdaptiveAvgPool2d(1)
         self.branch5_conv = nn.Conv2d(in_chans, out_chans, 1, 1, 0, bias=True)
         self.branch5_bn = nn.BatchNorm2d(out_chans)
         self.branch5_relu = nn.ReLU(inplace=True)
+        # 对concat后的结果进行1*1 Conv
         self.conv_cat = nn.Sequential(
             nn.Conv2d(out_chans * 5, out_chans, 1, 1, padding=0, bias=True),
             nn.BatchNorm2d(out_chans),
@@ -135,7 +143,7 @@ class ASPP(nn.Module):
         global_feature = self.branch5_avg(x)
         global_feature = self.branch5_relu(self.branch5_bn(self.branch5_conv(global_feature)))
         global_feature = F.interpolate(global_feature, (h, w), None, 'bilinear', True)
-
+        #concat处理
         feature_cat = torch.cat([conv1x1, conv3x3_1, conv3x3_2, conv3x3_3, global_feature], dim=1)
         result = self.conv_cat(feature_cat)
         return result

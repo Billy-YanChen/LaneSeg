@@ -132,18 +132,18 @@ def main():
                                                                               ScaleAug(), CutOut(32, 0.5), ToTensor()]))
 
     #set up training dataset 的dataloader
-    train_data_batch = DataLoader(train_dataset, batch_size=4*len(device_list), shuffle=True, drop_last=True, **kwargs)
+    train_data_batch = DataLoader(train_dataset, batch_size=2*len(device_list), shuffle=True, drop_last=True, **kwargs)
 
     #set ip validation dataset
     val_dataset = LaneDataset("val.csv", transform=transforms.Compose([ToTensor()]))
 
     #set up validation dataset's dataloader
-    val_data_batch = DataLoader(val_dataset, batch_size=2*len(device_list), shuffle=False, drop_last=False, **kwargs)
+    val_data_batch = DataLoader(val_dataset, batch_size=1*len(device_list), shuffle=False, drop_last=False, **kwargs)
 
     #build model
 
     net = DeeplabV3Plus(lane_config)
-
+    net.eval()
     #检测一下环境中是否存在GPU，存在的话就转化成cuda的格式
     if torch.cuda.is_available():
         net = net.cuda(device=device_list[0])
