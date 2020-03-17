@@ -12,7 +12,7 @@ from utils.process_labels import encode_labels, decode_labels, decode_color_labe
 sometimes = lambda aug: iaa.Sometimes(0.5, aug)
 
 
-# crop the image to discard useless parts
+# crop the image to discard useless parts 768, 256
 def crop_resize_data(image, label=None, image_size=(1024, 384), offset=690):
     """
     Attention:

@@ -16,7 +16,7 @@ from config import Config
 # os.environ["CUDA_VISIBLE_DEVICES"] = "7"
 
 # device_list = [2, 6]
-device_list = [0]
+device_list = [7,0]
 
 def train_epoch(net, epoch, dataLoader, optimizer, trainF, config):
     #model 转化成训练的状态
@@ -125,7 +125,9 @@ def main():
 
     #set up dataset
     # 'pin_memory'意味着生成的Tensor数据最开始是属于内存中的索页，这样的话转到GPU的显存就会很快
-    kwargs = {'num_workers': 4, 'pin_memory': True} if torch.cuda.is_available() else {}
+    kwargs = {
+        #'num_workers': 4,
+              'pin_memory': True} if torch.cuda.is_available() else {}
 
     #set up training dataset
     train_dataset = LaneDataset("train.csv", transform=transforms.Compose([ImageAug(), DeformAug(),

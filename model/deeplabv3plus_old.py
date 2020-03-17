@@ -11,6 +11,7 @@ class DeeplabV3Plus(nn.Module):
         self.backbone = resnet50_atrous(pretrained=True, os=cfg.OUTPUT_STRIDE)
         input_channel = 2048
         self.aspp = ASPP(in_chans=input_channel, out_chans=cfg.ASPP_OUTDIM, rate=16//cfg.OUTPUT_STRIDE)
+        #随机丢弃 0.5
         self.dropout1 = nn.Dropout(0.5)
         self.upsample4 = nn.UpsamplingBilinear2d(scale_factor=4)
         self.upsample_sub = nn.UpsamplingBilinear2d(scale_factor=cfg.OUTPUT_STRIDE//4)

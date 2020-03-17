@@ -6,10 +6,10 @@ from sklearn.utils import shuffle
 label_list = []
 image_list = []
 
-image_dir = 'E:\learn\data\LaneSeg\Image_Data/'
-label_dir = 'E:\learn\data\LaneSeg\Gray_Label/'
-# image_dir = '/root/data/LaneSeg/Image_Data'
-# label_dir = '/root/data/LaneSeg/Gray_Label'
+# image_dir = 'E:\learn\data\LaneSeg\Image_Data/'
+# label_dir = 'E:\learn\data\LaneSeg\Gray_Label/'
+image_dir = '/root/data/LaneSeg/Image_Data'
+label_dir = '/root/data/LaneSeg/Gray_Label'
 
 """
    ColorImage/

@@ -78,7 +78,8 @@ def main():
     # 预测图片的路径，存储在test_example
     # test_dir = 'test_example'
     # model_path = os.path.join(test_dir, predict_net + '_finalNet.pth.tar')
-    model_path = os.path.join('./logs','finalNet.pth.tar')
+    model_path = os.path.join('./logs', 'finalNet.pth.tar')
+    #model_path = os.path.join('E:/learn/result/resnet101', 'finalNet.pth.tar')
     '''model_dir = 'log'
     test_dir = 'test_example'
     model_path = os.path.join(model_dir,'finalNet.pth.tar'''''

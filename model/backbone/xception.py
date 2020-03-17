@@ -277,8 +277,8 @@ class AlignedXception(nn.Module):
 
     def _load_pretrained_model(self):
         # pretrain_dict = model_zoo.load_url('http://data.lip6.fr/cadene/pretrainedmodels/xception-b5690688.pth')
-        pretrain_dict = torch.load('E:/learn/xception-b5690688.pth')
-        # pretrain_dict = torch.load('/root/private/xception-b5690688.pth')
+        # pretrain_dict = torch.load('E:/learn/xception-b5690688.pth')
+        pretrain_dict = torch.load('/root/private/xception-b5690688.pth')
         model_dict = {}
         state_dict = self.state_dict()
 

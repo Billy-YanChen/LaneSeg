@@ -7,7 +7,7 @@ class Config(object):
     SHORTCUT_KERNEL = 1
     NUM_CLASSES = 8
     # resnet, xception, mobilenet
-    MODEL_BACKBONE = "mobilenet"
+    MODEL_BACKBONE = "xception"
     TRAIN_BN_MOM = 0.1
     SYNC_BN = True
     FREEZE_BN = False
